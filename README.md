@@ -1,23 +1,17 @@
-### 📷 [ASCII-Webcam](https://github.com/micodeyt/ascii-webcam)
+### [C++ ASCII-Webcam](https://github.com/Guerout-Arnaud/ascii-webcam)
+
 
 ## INFO
+Based on a [ASCII-Webcam](https://github.com/micodeyt/ascii-webcam) 
 
-> ✅ Affiche votre webcam en ASCII dans votre terminal !<br/>
-> 🎥 Utilisé dans la vidéo : https://youtu.be/DBnStqiLB-Q<br/>
-> 📍 Ce projet a été inspiré par : https://github.com/uvipen/ASCII-generator
+Initially made in Python, this projet is a fork from Micode project.
+I wanted to push it futher and, as Micode and Hardisk mentioned in [this video](https://youtu.be/DBnStqiLB-Q) make a virtual camera out of it.
+Unfortunately, I don't like Python so I made it in C++
+
+Project is currently WIP but it will come soon
 
 ## Installation
-
-```sh
-- git clone https://github.com/micodeyt/ascii-webcam
-
-- cd /path
-
-- pip install -r requirements.txt
-```
+ToDo
 
 ## Utilisation
-
-```sh
-py cam.py
-```
+ToDo
