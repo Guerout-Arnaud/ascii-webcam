@@ -44,9 +44,11 @@ uint8_t AsciiProcessor::avg(uint8_t *videoBuffer, int x, int y)
 
     for (int i = 0; i < cell_height; i++) {
         for (int j = 0; j < cell_width; j++) {
-            grayscale = grayscale + frame.at<uchar>(
-                ((y_init + i) < videoHeight) ? (y_init + i) : videoHeight,
-                ((x_init + j) < videoWidth) ? (x_init + j) : videoWidth
+            grayscale = grayscale + videoBuffer[(y_init * videoWidth) + x_init + (i * videoWidth) + j];
+                
+                // frame.at<uchar>(
+                // ((y_init + i) < videoHeight) ? (y_init + i) : videoHeight,
+                // ((x_init + j) < videoWidth) ? (x_init + j) : videoWidth
             );
         }
     }
