@@ -10,17 +10,23 @@
 **
 */
 
-// #include <iostream>
-// #include <stdexcept>
-// #include <string.h>
-// #include <sys/ioctl.h>
-// #include <linux/videodev2.h>
-#include "VideoCapture.hpp"
+#include <iostream>
+#include <stdexcept>
+#include <ios>
+
+#include <unistd.h>
+#include <string.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <sys/mman.h>
+#include <linux/videodev2.h>
+
+#include "linux/VideoCapture.hpp"
 
 VideoCapture::VideoCapture(std::string videoFilepath, unsigned int width = 1920, unsigned int height = 720)
 {
     this->videoBuffer = NULL;
-    this->buffsize = 0;
+    this->buffSize = 0;
     this->fd = -1;
     this->width = width;
     this->height = height;
@@ -47,7 +53,7 @@ VideoCapture::VideoCapture(std::string videoFilepath, unsigned int width = 1920,
     buf.memory = V4L2_MEMORY_MMAP;
     buf.index = 0;
 
-    this->fd = open(videoFilepath, O_RDWR);
+    this->fd = open(videoFilepath.c_str(), O_RDWR);
     if (fd == -1)
         throw new std::runtime_error("Open File. Unable to open ");
 
@@ -71,7 +77,7 @@ VideoCapture::VideoCapture(std::string videoFilepath, unsigned int width = 1920,
     std::cout << "\tCard:\t\"" << caps.card << "\"" << std::endl;
     std::cout << "\tBus:\t\"" << caps.bus_info << "\"" << std::endl;
     std::cout << "\tVersion:\t" << ((caps.version >> 16) && 0xff) << "." << ((caps.version >> 24) && 0xff) << std::endl;
-    std::cout << "\tCapabilities:\t" << std::format("{:08x}", caps.capabilities) << std::endl;
+    std::cout << "\tCapabilities:\t" << std::hex << caps.capabilities << std::endl;
 
     std::cout << "Camera Cropping:" << std::endl;
     std::cout << "\tBounds:\t" << cropcap.bounds.width << "x" << cropcap.bounds.height << "+" << cropcap.bounds.left << "+" << cropcap.bounds.top << std::endl;
@@ -96,9 +102,9 @@ VideoCapture::VideoCapture(std::string videoFilepath, unsigned int width = 1920,
     std::cout << "\tField:\t" << fmt.fmt.pix.field << std::endl;
 
     this->buffSize = buf.length;
-    this->buffer = (uint8_t *)mmap (NULL, this->buffSize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, buf.m.offset);
-    std:cout << "Length: " << buf.length << "\nAddress: " << buffer << std::endl;
-std:cout << "Image Length: " << buf.bytesused << std::endl;
+    this->videoBuffer = (uint8_t *)mmap (NULL, this->buffSize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, buf.m.offset);
+    std::cout << "Length: " << buf.length << "\nAddress: " << videoBuffer << std::endl;
+    std::cout << "Image Length: " << buf.bytesused << std::endl;
 
 }
 

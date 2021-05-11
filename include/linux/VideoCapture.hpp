@@ -13,12 +13,12 @@
 #ifndef VIDEO_CAPTURE_HPP_
     #define VIDEO_CAPTURE_HPP_
 
-    // #include <stdint.h>
-    // #include <string>
+    #include <string>
+    #include <cstdint>
 
     class VideoCapture {
         public:
-            VideoCapture(std::string filepath);
+            VideoCapture(std::string videoFilepath, unsigned int width, unsigned int height);
             ~VideoCapture();
             const unsigned int getVideoWidth() const;
             const unsigned int getVideoHeight() const;
@@ -27,12 +27,11 @@
         protected:
 
         private:
-            uint8_t *videoBuffer;
-            unsigned int buffSize;
             int fd;
             unsigned int width;
             unsigned int height;
-
+            unsigned int buffSize;
+            uint8_t *videoBuffer;
     };
 
 #endif

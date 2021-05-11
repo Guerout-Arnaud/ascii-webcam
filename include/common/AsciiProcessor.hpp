@@ -13,11 +13,14 @@
 #ifndef ASCII_PROCESSOR_HPP_
     #define ASCII_PROCESSOR_HPP_
 
+    #include <cstdint>
+
     class AsciiProcessor {
         public:
             AsciiProcessor(unsigned int videoWidth, unsigned int videoHeight, unsigned int outputWidth, unsigned int outputHeight);
             ~AsciiProcessor();
             void transformToAscii(uint8_t *videoBuffer, bool *isRunning);
+            uint8_t const *getTransformedBuffer() const;
 
         protected:
 
@@ -29,9 +32,9 @@
             unsigned int outputHeight;
 
 
-            uint8_t const *getTransformedBuffer() const;
             void transformToAscii(uint8_t *videoBuffer, bool *isRunning);
             uint8_t avg(uint8_t *videoBuffer, int x, int y);
+            const uint8_t const *grayToChar(uint8_t grayscale) const;
 
     };
 

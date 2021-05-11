@@ -10,12 +10,15 @@
 **
 */
 
-#include "bitmask_16.hpp"
-#include "AsciiProcessor.hpp"
+#include <cstdint>
+#include <cstdlib>
+
+#include "common/bitmask_16.hpp"
+#include "common/AsciiProcessor.hpp"
 
 AsciiProcessor::AsciiProcessor(unsigned int videoWidth, unsigned int videoHeight, unsigned int outputWidth, unsigned int outputHeight)
 {
-    this->tranformedBuffer = (uint8_t *)malloc(sizeof(*this->tranformedBuffer) * (outputWidth * BITMASK_WIDTH) * (outputHeight * BITMASK_HEIGHT));
+    this->tranformedBuffer = (uint8_t *)malloc(sizeof(*(this->tranformedBuffer)) * (outputWidth * BITMASK_WIDTH) * (outputHeight * BITMASK_HEIGHT));
     this->videoWidth = videoWidth;
     this->videoHeight = videoHeight;
     this->outputWidth = outputWidth;
@@ -24,11 +27,11 @@ AsciiProcessor::AsciiProcessor(unsigned int videoWidth, unsigned int videoHeight
 
 AsciiProcessor::~AsciiProcessor()
 {
-    free(transformedBuffer);
+    free(tranformedBuffer);
 }
 
-uint8_t const *AsciiProcessor::getVideoBuffer() const {
-    return (this->videoBuffer);
+uint8_t const *AsciiProcessor::getTransformedBuffer() const {
+    return (this->tranformedBuffer);
 }
 
 uint8_t AsciiProcessor::avg(uint8_t *videoBuffer, int x, int y)
@@ -44,18 +47,18 @@ uint8_t AsciiProcessor::avg(uint8_t *videoBuffer, int x, int y)
 
     for (int i = 0; i < cell_height; i++) {
         for (int j = 0; j < cell_width; j++) {
-            grayscale = grayscale + videoBuffer[(y_init * videoWidth) + x_init + (i * videoWidth) + j];
+            grayscale = grayscale + videoBuffer[(y_init * 2 * cell_width) + x_init + (i * 2 * cell_width) + j];
                 
                 // frame.at<uchar>(
                 // ((y_init + i) < videoHeight) ? (y_init + i) : videoHeight,
                 // ((x_init + j) < videoWidth) ? (x_init + j) : videoWidth
-            );
+                // );
         }
     }
     return (grayscale / (cell_width * cell_height));
 }
 
-uint8_t *grayToChar(uint_t grayscale) {
+const uint8_t const *AsciiProcessor::grayToChar(uint8_t grayscale) const {
 
     int idx = (grayscale * BITMASK_LEN) / 255;
 
@@ -64,7 +67,7 @@ uint8_t *grayToChar(uint_t grayscale) {
 
 void AsciiProcessor::transformToAscii(uint8_t *videoBuffer, bool *isRunning)
 {
-    uint8_t *mask = NULL;
+    const uint8_t *mask = NULL;
     
     for (; *isRunning == true;) {
         for (int i = 0; i < this->outputHeight; i++) {
