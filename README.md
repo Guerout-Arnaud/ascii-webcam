@@ -1,17 +1,18 @@
-### [C++ ASCII-Webcam](https://github.com/Guerout-Arnaud/ascii-webcam)
+# [C++ ASCII-Webcam](https://github.com/Guerout-Arnaud/ascii-webcam)
 
 
 ## INFO
-Based on a [ASCII-Webcam](https://github.com/micodeyt/ascii-webcam)
+This project has been inspired by [ASCII-Webcam](https://github.com/micodeyt/ascii-webcam)
+Micode's project come from [his video](https://youtu.be/DBnStqiLB-Q). In this video an other youtuber, Hardisk mentioned the fact that it could be cool to have this camera in a video call.
+The initial project was made in pyton using OpenCV, and did not allow us to create the virtual camera out of it. Fortunately an other developer named letmaik made it possible. You can find his project [here](https://github.com/letmaik/pyvirtualcam/tree/master/pyvirtualcam).
 
-Initially made in Python, this projet is a fork from Micode project.
-I wanted to push it futher and, as Micode and Hardisk mentioned in [this video](https://youtu.be/DBnStqiLB-Q) make a virtual camera out of it.
-Unfortunately, I don't like Python so I made it in C++
-
-Project is currently WIP but it will come soon
+Because I don't like python, I've decided to start all over again in C++.
+I've also decided to get rid as much as possible from OpenCV for latency issues.
+I aim to do a cross plateform final project for you to be able to use it on Linux, Windows and OSX.
+If you're just looking for trying out without any installation requiered, you can find a web version [here](https://github.com/calvetalex/ascii-camera-online).
 
 ## Installation
-ToDo
+ToDo - Project is still WIP
 
 ## Utilisation
-ToDo
+ToDo - Project is still WIP
