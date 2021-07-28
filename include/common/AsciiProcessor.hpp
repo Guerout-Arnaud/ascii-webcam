@@ -19,7 +19,7 @@
         public:
             AsciiProcessor(unsigned int videoWidth, unsigned int videoHeight, unsigned int outputWidth, unsigned int outputHeight);
             ~AsciiProcessor();
-            void transformToAscii(uint8_t *videoBuffer, bool *isRunning);
+            void transformToAscii(uint8_t const *videoBuffer);
             uint8_t const *getTransformedBuffer() const;
 
         protected:
@@ -31,10 +31,8 @@
             unsigned int outputWidth;
             unsigned int outputHeight;
 
-
-            void transformToAscii(uint8_t *videoBuffer, bool *isRunning);
-            uint8_t avg(uint8_t *videoBuffer, int x, int y);
-            const uint8_t const *grayToChar(uint8_t grayscale) const;
+            uint8_t avg(uint8_t const *videoBuffer, int x, int y);
+            const uint8_t *grayToChar(uint8_t grayscale) const;
 
     };
 

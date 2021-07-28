@@ -1,22 +1,32 @@
 cmake_minimum_required(VERSION 3.1)
-project( DisplayImage )
+project( ascii-webcam )
 set (CMAKE_CXX_STANDARD 17)
 
 
+
 find_package( OpenCV REQUIRED )
-# find_package( LIBUV REQUIRED )
-include_directories( ${OpenCV_INCLUDE_DIRS} ${UV_INCLUDE_DIRS})
+# find_package( yuv REQUIRED )
+include_directories( ${OpenCV_INCLUDE_DIRS})
 
-# add_executable( main bkup/bkup.cpp )
-# target_link_libraries( main ${OpenCV_LIBS} )
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
-add_executable( test bkup/test2.cpp )
-target_link_libraries( test ${OpenCV_LIBS} )
+set (COMMON_SRC
+    src/main.cpp
+    src/common/ArgParser.cpp
+    src/common/AsciiProcessor.cpp
+)
 
-# add_executable( capture bkup/capture.cpp )
+set (LINUX_SRC
+    src/linux/VideoCapture.cpp
+    src/linux/VideoOutput.cpp
+)
+
+add_executable( ${PROJECT_NAME} ${COMMON_SRC} ${LINUX_SRC})
+target_include_directories( ${PROJECT_NAME} PUBLIC ${OpenCV_INCLUDE_DIRS} PUBLIC ./include)
+target_link_libraries( ${PROJECT_NAME} ${OpenCV_LIBS})
+
+# add_executable( capture .local/bkup.cpp)
+# target_include_directories( capture PUBLIC ${OpenCV_INCLUDE_DIRS})
 # target_compile_definitions( capture PUBLIC "-std=c++17" )
 # target_link_libraries( capture ${OpenCV_LIBS} yuv)
 
-# add_executable( test src/test.cpp )
-# # target_compile_definitions( capture PUBLIC "-std=c++17" )
-# target_link_libraries( test ${OpenCV_LIBS})

@@ -14,6 +14,9 @@
 #include <stdexcept>
 #include <ios>
 
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+
 #include <unistd.h>
 #include <string.h>
 #include <fcntl.h>
@@ -23,14 +26,20 @@
 
 #include "linux/VideoCapture.hpp"
 
-VideoCapture::VideoCapture(std::string videoFilepath, unsigned int width = 1920, unsigned int height = 720)
+VideoCapture::VideoCapture(std::string videoFilepath, unsigned int width = 1920, unsigned int height = 1080)
 {
-    this->videoBuffer = NULL;
+    this->buff = NULL;
     this->buffSize = 0;
     this->fd = -1;
     this->width = width;
     this->height = height;
+
+    std::cout << "Width:" << width << std::endl; 
+    std::cout << "Height:" << height << std::endl; 
     
+    std::cout << "this->Width:" << this->width << std::endl;
+    std::cout << "this->Height:" << this->height << std::endl;
+
     struct v4l2_capability caps = {0};
     struct v4l2_cropcap cropcap = {0};
     struct v4l2_format fmt = {0};
@@ -43,8 +52,10 @@ VideoCapture::VideoCapture(std::string videoFilepath, unsigned int width = 1920,
 
     cropcap.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    fmt.fmt.pix.width = this->height;
-    fmt.fmt.pix.height = this->width;
+    fmt.fmt.pix.width = this->width;
+    // fmt.fmt.pix.width = 1080;
+    fmt.fmt.pix.height = this->height;
+    // fmt.fmt.pix.height = 720;
     fmtdesc.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     req.count = 1;
     req.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -96,22 +107,26 @@ VideoCapture::VideoCapture(std::string videoFilepath, unsigned int width = 1920,
     
     strncpy(fourcc, (char *)&fmt.fmt.pix.pixelformat, 4);
     std::cout << "Selected Camera Mode:" << std::endl;
-    std::cout << "\tWidth:\t" << fmt.fmt.pix.width << std::endl;
-    std::cout << "\tHeight:\t" << fmt.fmt.pix.height << std::endl;
+    std::cout << "\tWidth:\t" << std::to_string(fmt.fmt.pix.width) << std::endl;
+    std::cout << "\tHeight:\t" << std::to_string(fmt.fmt.pix.height) << std::endl;
     std::cout << "\tPixFmt:\t" << fourcc << std::endl;
     std::cout << "\tField:\t" << fmt.fmt.pix.field << std::endl;
 
-    this->buffSize = buf.length;
-    this->videoBuffer = (uint8_t *)mmap (NULL, this->buffSize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, buf.m.offset);
-    std::cout << "Length: " << buf.length << "\nAddress: " << videoBuffer << std::endl;
-    std::cout << "Image Length: " << buf.bytesused << std::endl;
+    this->width = fmt.fmt.pix.width;
+    this->height = fmt.fmt.pix.height;
+    this->videoBuffer = cv::Mat(this->height, this->width, CV_8UC1, cv::Scalar(0, 0, 0));
 
+    this->buffSize = buf.length;
+    this->buff = (uint8_t *)mmap (NULL, this->buffSize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, buf.m.offset);
+    std::cout << "Length: " << buf.length << "\nAddress: " << buff << std::endl;
+    std::cout << "Image Length: " << buf.bytesused << std::endl;
+    std::cout << "buffSize: " << buffSize << std::endl;
 }
 
 VideoCapture::~VideoCapture()
 {
     close(this->fd);
-    munmap(this->videoBuffer, this->buffSize);
+    munmap(this->buff, this->buffSize);
 }
 
 const unsigned int VideoCapture::getVideoWidth() const {
@@ -123,5 +138,49 @@ const unsigned int VideoCapture::getVideoHeight() const {
 }
 
 uint8_t const *VideoCapture::getVideoBuffer() const {
+    return (this->videoBuffer.data);
+}
+
+void VideoCapture::captureVideo()
+{
+    struct v4l2_buffer buf = {0};
+    fd_set fds = {0};
+    struct timeval tv = {0};
+    int r = -1;
+    
+    buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    buf.memory = V4L2_MEMORY_MMAP;
+    buf.index = 0;
+
+    FD_ZERO(&fds);
+    FD_SET(fd, &fds);
+
+    if (ioctl(fd, VIDIOC_QBUF, &buf) == -1) {
+        perror("Query Buffer");
+        return;
+    }
+ 
+    if (ioctl(fd, VIDIOC_STREAMON, &buf.type) == -1) {
+        perror("Start Capture");
+        return;
+    }
+    
+    r = select(fd + 1, &fds, NULL, NULL, &tv);
+    if (r == -1) {
+        perror("Waiting for Frame");
+        return;
+    }
+ 
+    if (ioctl(fd, VIDIOC_DQBUF, &buf) == -1) {
+        perror("Retrieving Frame");
+        return;
+    }
+
+    cv::_InputArray pic_arr(buff, width * height * 3);
+    cv::imdecode(pic_arr, cv::IMREAD_GRAYSCALE, &videoBuffer);
+}
+
+cv::Mat VideoCapture::getMat()
+{
     return (this->videoBuffer);
 }

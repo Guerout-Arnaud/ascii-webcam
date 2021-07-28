@@ -14,9 +14,10 @@ static unsigned int BITMASK_LEN = 10;
 static unsigned int BITMASK_WIDTH = 16;
 static unsigned int BITMASK_HEIGHT = 16;
 
-const uint8_t const *BITMASKS[] =
+const uint8_t *BITMASKS[] =
 {
     // Space ' '
+    (uint8_t *)
     "0000000000000000"    
     "0000000000000000"    
     "0000000000000000"    
@@ -36,6 +37,7 @@ const uint8_t const *BITMASKS[] =
     ,
 
     // Dot '.'
+    (uint8_t *)
     "0000000000000000"
     "0000000000000000"
     "0000000000000000"
@@ -55,6 +57,7 @@ const uint8_t const *BITMASKS[] =
     ,
 
     // Colon ':'
+    (uint8_t *)
     "0000000000000000"
     "0000000000000000"
     "0000000000000000"
@@ -74,6 +77,7 @@ const uint8_t const *BITMASKS[] =
     ,
     
     // Dash '-'
+    (uint8_t *)
     "0000000000000000"
     "0000000000000000"
     "0000000000000000"
@@ -93,6 +97,7 @@ const uint8_t const *BITMASKS[] =
     ,
     
     // Equals '='
+    (uint8_t *)
     "0000000000000000"
     "0000000000000000"
     "0000000000000000"
@@ -112,6 +117,7 @@ const uint8_t const *BITMASKS[] =
     ,
     
     // Plus '+'
+    (uint8_t *)
     "0000000000000000"
     "0000000000000000"
     "0000000000000000"
@@ -131,6 +137,7 @@ const uint8_t const *BITMASKS[] =
     ,
     
     // Asterisk '*'
+    (uint8_t *)
     "0000000000000000"
     "0000000000000000"
     "0000000100000000"
@@ -150,6 +157,7 @@ const uint8_t const *BITMASKS[] =
     ,
     
     // Sharp '#'
+    (uint8_t *)
     "0000000000000000"
     "0000001001000000"
     "0000001001000000"
@@ -169,6 +177,7 @@ const uint8_t const *BITMASKS[] =
     ,
 
     // Percent '%'
+    (uint8_t *)
     "0000000000000000"
     "0000000000000000"
     "0000000000000000"
@@ -188,6 +197,7 @@ const uint8_t const *BITMASKS[] =
     ,
 
     // At '@'
+    (uint8_t *)
     "0000000000000000"
     "0000000000000000"
     "0000000000000000"

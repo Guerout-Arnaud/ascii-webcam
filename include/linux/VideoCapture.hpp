@@ -14,16 +14,23 @@
     #define VIDEO_CAPTURE_HPP_
 
     #include <string>
+    #include <vector>
     #include <cstdint>
+
+    #include <opencv2/core/core.hpp>
+    #include <opencv2/highgui/highgui.hpp>
 
     class VideoCapture {
         public:
             VideoCapture(std::string videoFilepath, unsigned int width, unsigned int height);
             ~VideoCapture();
+
             const unsigned int getVideoWidth() const;
             const unsigned int getVideoHeight() const;
             uint8_t const *getVideoBuffer() const;
 
+            void captureVideo();
+            cv::Mat getMat();
         protected:
 
         private:
@@ -31,7 +38,9 @@
             unsigned int width;
             unsigned int height;
             unsigned int buffSize;
-            uint8_t *videoBuffer;
+            uint8_t *buff;
+            // std::vector<uint8_t> videoBuffer;
+            cv::Mat videoBuffer;
     };
 
 #endif
