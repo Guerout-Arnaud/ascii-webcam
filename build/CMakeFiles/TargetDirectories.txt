@@ -1,3 +1,0 @@
-/home/arnaud/Epitech/ascii-webcam/build/CMakeFiles/rebuild_cache.dir
-/home/arnaud/Epitech/ascii-webcam/build/CMakeFiles/edit_cache.dir
-/home/arnaud/Epitech/ascii-webcam/build/CMakeFiles/ascii-webcam.dir

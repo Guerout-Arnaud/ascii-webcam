@@ -28,6 +28,17 @@ static const int SECOND = 1000000;
     #define FPS 60
 #endif
 
+#ifndef COLS
+    // #define COLS 64
+    #define COLS 50
+#endif
+
+#ifndef ROWS
+    // #define ROWS 48
+    #define ROWS 37
+#endif
+
+
 static bool isRunning = true;
 
 static void fetch_video(VideoCapture &camera)
@@ -68,13 +79,25 @@ int main (int argc, char **argv)
 
         std::cout << "Processor: ";
         // AsciiProcessor ascii_prcsr = AsciiProcessor(vid_input.getVideoWidth(), vid_input.getVideoHeight(), atoi(args.getArgument("char_width").c_str()), atoi(args.getArgument("char_height").c_str()));
-        AsciiProcessor ascii_prcsr = AsciiProcessor(vid_input.getVideoWidth(), vid_input.getVideoHeight(), 64, 48);
+        AsciiProcessor ascii_prcsr = AsciiProcessor(vid_input.getVideoWidth(), vid_input.getVideoHeight(), COLS, ROWS);
+        // AsciiProcessor ascii_prcsr = AsciiProcessor(vid_input.getVideoWidth(), vid_input.getVideoHeight(), 640, 480);
         // AsciiProcessor ascii_prcsr = AsciiProcessor(64, 64, 4, 4);
         std::cout << "Done" << std::endl;
 
-        std::cout << "Output: ";
+        std::cout << "Output: " << std::endl;
         // if (args.getArgument("video_output_file").empty())
-            VideoOutput vid_output = VideoOutput(vid_input.getVideoWidth(), vid_input.getVideoHeight());
+            // VideoOutput vid_output = VideoOutput(vid_input.getVideoWidth(), vid_input.getVideoHeight());
+            // VideoOutput vid_output = VideoOutput(48*16, 64*16);
+
+            int nb = 50 * 16;
+
+            std::cout << "Width: " << nb << std::endl;
+            std::cout << "Height: " << (37  * 16) << std::endl;
+
+            std::cout << "Width: " << ((int) COLS) * 16 << std::endl;
+            std::cout << "Height: " << ((int) ROWS)  * 16 << std::endl;
+
+            VideoOutput vid_output = VideoOutput(COLS*16, ROWS*16);
             // VideoOutput vid_output = VideoOutput(64, 64);
         // else
             // VideoOutput vid_output = VideoOutput(vid_input.getVideoWidth(), vid_input.getVideoHeight(), args.getArgument("video_output_file"));
@@ -86,7 +109,10 @@ int main (int argc, char **argv)
 
         for(int i = 0;; i++) {
             fetch_video(vid_input);
-            cv::Mat output = cv::Mat(48*16, 64*16, CV_8UC1, cv::Scalar(0, 0, 0));
+            cv::Mat output = cv::Mat(ROWS*16, COLS*16, CV_8UC1, cv::Scalar(0, 0, 0));
+            // cv::Mat output = cv::Mat(vid_input.getVideoWidth(), vid_input.getVideoHeight(), CV_8UC1, cv::Scalar(0, 0, 0));
+            // cv::Mat output = cv::Mat(480 * 16, 640 * 16, CV_8UC1, cv::Scalar(0, 0, 0));
+
             // cv::Mat test = cv::Mat(64, 64, CV_8UC1, cv::Scalar(255, 255, 255));
 
             // std::cout << "BUFFER" << std::endl;
@@ -108,7 +134,6 @@ int main (int argc, char **argv)
             // output_video(vid_output, vid_input.getVideoBuffer());
 
 
-
             // for (int i = 0; i < (1080 * 720); i++) {
             //     printf("%d", tmp.data[i]);
             //     if ((i % 720) == 0)
@@ -119,7 +144,7 @@ int main (int argc, char **argv)
             // cv::imshow("view", vid_input.getMat());
             // if (i == 0)
             // std::cout << std::to_string(vid_input.getMat().rows) << std::to_string(vid_input.getMat().cols) << std::endl; 
-            cv::imshow("Input", vid_input.getMat());
+            // cv::imshow("Input", vid_input.getMat());
             // cv::imshow("Input", test);
             cv::imshow("Output", output);
             cv::waitKey(16);

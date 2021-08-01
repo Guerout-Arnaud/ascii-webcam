@@ -20,11 +20,16 @@
 
 AsciiProcessor::AsciiProcessor(unsigned int videoWidth, unsigned int videoHeight, unsigned int outputWidth, unsigned int outputHeight)
 {
-    this->tranformedBuffer = (uint8_t *)malloc(sizeof(*(this->tranformedBuffer)) * (outputWidth * BITMASK_WIDTH) * (outputHeight * BITMASK_HEIGHT) * 3);
+    this->tranformedBuffer = (uint8_t *)malloc(sizeof(*(this->tranformedBuffer)) * (outputWidth * BITMASK_WIDTH) * (outputHeight * BITMASK_HEIGHT));
+    // this->tranformedBuffer = (uint8_t *)malloc(sizeof(*(this->tranformedBuffer)) * (outputWidth * BITMASK_WIDTH) * (outputHeight * BITMASK_HEIGHT) * 3);
     this->videoWidth = videoWidth;
     this->videoHeight = videoHeight;
     this->outputWidth = outputWidth;
     this->outputHeight = outputHeight;
+
+    std::cout << "=========== Processor ==========" << std::endl;
+    std::cout << "Width: " << outputWidth << std::endl;
+    std::cout << "Height: " << outputHeight << std::endl; 
 }
 
 AsciiProcessor::~AsciiProcessor()
@@ -79,10 +84,10 @@ const uint8_t *AsciiProcessor::grayToChar(uint8_t grayscale) const {
     
     int idx = (grayscale * BITMASK_LEN) / 255;
 
-    if (idx < (BITMASK_LEN - 1))
-        std::cout << CHAR_LIST[idx];
-    else
-        std::cout << CHAR_LIST[BITMASK_LEN - 1];
+    // if (idx < (BITMASK_LEN - 1))
+    //     std::cout << CHAR_LIST[idx];
+    // else
+    //     std::cout << CHAR_LIST[BITMASK_LEN - 1];
     
     return (idx < (BITMASK_LEN - 1) ? BITMASKS[idx] : BITMASKS[BITMASK_LEN - 1]);
 }
@@ -110,22 +115,22 @@ void AsciiProcessor::transformToAscii(uint8_t const *videoBuffer)
                         // std::cout<< "LA" << std::endl;
                         // ToDo rework to not overflow
                         this->tranformedBuffer[(i * BITMASK_HEIGHT * BITMASK_WIDTH * this->outputWidth) + (j * BITMASK_WIDTH) + (y * BITMASK_WIDTH * this->outputWidth) + x] = 0;
-                        this->tranformedBuffer[(i * BITMASK_HEIGHT * BITMASK_WIDTH * this->outputWidth) + (j * BITMASK_WIDTH) + (y * BITMASK_WIDTH * this->outputWidth) + x + 1] = 0;
-                        this->tranformedBuffer[(i * BITMASK_HEIGHT * BITMASK_WIDTH * this->outputWidth) + (j * BITMASK_WIDTH) + (y * BITMASK_WIDTH * this->outputWidth) + x + 2] = 0;
+                        // this->tranformedBuffer[(i * BITMASK_HEIGHT * BITMASK_WIDTH * this->outputWidth) + (j * BITMASK_WIDTH) + (y * BITMASK_WIDTH * this->outputWidth) + x + 1] = 0;
+                        // this->tranformedBuffer[(i * BITMASK_HEIGHT * BITMASK_WIDTH * this->outputWidth) + (j * BITMASK_WIDTH) + (y * BITMASK_WIDTH * this->outputWidth) + x + 2] = 0;
                     } else {
                         // std::cout<< "ICI" << std::endl;
                         // ToDo rework to not overflow
                         this->tranformedBuffer[(i * BITMASK_HEIGHT * BITMASK_WIDTH * this->outputWidth) + (j * BITMASK_WIDTH) + (y * BITMASK_WIDTH * this->outputWidth) + x] = 255;
-                        this->tranformedBuffer[(i * BITMASK_HEIGHT * BITMASK_WIDTH * this->outputWidth) + (j * BITMASK_WIDTH) + (y * BITMASK_WIDTH * this->outputWidth) + x + 1] = 255;
-                        this->tranformedBuffer[(i * BITMASK_HEIGHT * BITMASK_WIDTH * this->outputWidth) + (j * BITMASK_WIDTH) + (y * BITMASK_WIDTH * this->outputWidth) + x + 2] = 255;
+                        // this->tranformedBuffer[(i * BITMASK_HEIGHT * BITMASK_WIDTH * this->outputWidth) + (j * BITMASK_WIDTH) + (y * BITMASK_WIDTH * this->outputWidth) + x + 1] = 255;
+                        // this->tranformedBuffer[(i * BITMASK_HEIGHT * BITMASK_WIDTH * this->outputWidth) + (j * BITMASK_WIDTH) + (y * BITMASK_WIDTH * this->outputWidth) + x + 2] = 255;
                     }
                 }
             }
         }
-        std::cout << std::endl;
+        // std::cout << std::endl;
     }
     
-    std::cout << std::endl;
-    std::cout << std::endl;
-    std::cout << std::endl;
+    // std::cout << std::endl;
+    // std::cout << std::endl;
+    // std::cout << std::endl;
 }
